@@ -21,4 +21,16 @@ export class UserService {
   findAll(): Promise<[User[], number]> {
     return this.userRepository.findAndCount();
   }
+
+  create(data): Promise<any> {
+    const user = new User();
+    user.email = data.email;
+    user.mobile = data.mobile;
+    user.password = data.password;
+    user.salt = data.salt;
+    user.status = data.status;
+    user.username = data.username;
+
+    return this.userRepository.save(user);
+  }
 }

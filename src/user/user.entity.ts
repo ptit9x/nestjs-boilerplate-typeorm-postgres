@@ -8,18 +8,18 @@ export class User {
   @Column()
   username: string;
 
-  @Column({ length: 500 })
+  @Column({ length: 512 })
   password: string;
+
+  @Column({ length: 512 })
+  salt: string;
 
   @Column()
   email: string;
 
-  @Column({ length: 500 })
-  url: string;
+  @Column()
+  mobile: string;
 
   @Column('int')
   status: number;
-
-  @Column()
-  dispayName: string;
 }
