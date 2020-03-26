@@ -1,4 +1,4 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpStatus, HttpException, InternalServerErrorException } from "@nestjs/common";
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpStatus, HttpException } from "@nestjs/common";
 import { catchError } from "rxjs/operators";
 import { CustomLogger } from "../logger/custom-logger.service";
 

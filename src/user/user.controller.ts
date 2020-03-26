@@ -2,10 +2,10 @@ import { Controller, Get, Param, InternalServerErrorException, UseInterceptors, 
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { ExceptionInterceptor } from '../common/interceptors/exception.interceptor';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AuthGuard } from '../common/guards/auth.guard';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard)
 @UseInterceptors(ExceptionInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) { }
@@ -27,10 +27,9 @@ export class UserController {
 
   @Get(':id')
   get(@Param('id') id: number): Promise<User> {
-    return this.userService.findOne(id)
+    return this.userService.findById(id)
       .catch((error) => {
         throw new InternalServerErrorException(error.message);
       });
   }
-
 }

@@ -10,16 +10,18 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  findOneByConditions({ username }: any): Promise<User> {
-    return this.userRepository.findOne({ username });
+  findOneByConditions(conditions: object): Promise<User> {
+    return this.userRepository.findOne(conditions);
   }
 
-  findOne(id: number): Promise<User> {
+  findById(id: number): Promise<User> {
     return this.userRepository.findOneOrFail(id);
   }
 
   findAll(): Promise<[User[], number]> {
-    return this.userRepository.findAndCount();
+    return this.userRepository.findAndCount({
+      select: ['id', 'email', 'mobile', 'status']
+    });
   }
 
   create(data): Promise<any> {

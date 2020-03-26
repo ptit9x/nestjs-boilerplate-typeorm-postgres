@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity()
 export class User {
@@ -6,12 +6,13 @@ export class User {
   id: number;
 
   @Column()
+  @Index({ unique: true })
   username: string;
 
-  @Column({ length: 512 })
+  @Column()
   password: string;
 
-  @Column({ length: 512 })
+  @Column()
   salt: string;
 
   @Column()
@@ -20,6 +21,6 @@ export class User {
   @Column()
   mobile: string;
 
-  @Column('int')
+  @Column('int', { default: 0 })
   status: number;
 }
