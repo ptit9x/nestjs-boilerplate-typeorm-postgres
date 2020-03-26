@@ -1,10 +1,12 @@
-import { Controller, Get, Param, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Get, Param, InternalServerErrorException, UseInterceptors, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
-// import { AuthGuard } from '@nestjs/passport';
+import { ExceptionInterceptor } from '../common/interceptors/exception.interceptor';
+import { AuthGuard } from '../common/guards/auth.guard';
 
-// @UseGuards(AuthGuard('jwt'))
 @Controller('users')
+@UseGuards(AuthGuard)
+@UseInterceptors(ExceptionInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
@@ -20,18 +22,14 @@ export class UserController {
         data,
         total,
       };
-    })
-    .catch((error) => {
-      throw new InternalServerErrorException(error.message);
     });
   }
 
   @Get(':id')
   get(@Param('id') id: number): Promise<User> {
-    return this.userService.findOne(id)
+    return this.userService.findById(id)
       .catch((error) => {
         throw new InternalServerErrorException(error.message);
       });
   }
-
 }
