@@ -13,14 +13,7 @@ export class AuthService {
   ) { }
 
   async register(userData): Promise<TokenResponse> {
-    const salt = this.encryptionService.getSalt();
-    const password = this.encryptionService.encryptPassword(userData.password, salt);
-  
-    const newUser = Object.assign({}, userData);
-    newUser.salt = salt;
-    newUser.password = password;
-
-    const user = await this.usersService.create(newUser);
+    const user = await this.usersService.create(userData);
     const accessToken = await this.tokenService.generateToken(user);
     const refreshToken = await this.tokenService.generateRefreshToken(user);
 

@@ -1,22 +1,18 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index, OneToMany } from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 500 })
+  @Column()
+  @Index({ unique: true })
   name: string;
 
   @Column('text')
   description: string;
 
-  @Column()
-  filename: string;
-
-  @Column('int')
-  views: number;
-
-  @Column()
-  isPublished: boolean;
+  @OneToMany(type => User, user => user.id)
+  users: User[];
 }

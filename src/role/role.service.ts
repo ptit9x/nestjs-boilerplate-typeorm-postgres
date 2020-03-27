@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, InsertResult, UpdateResult } from 'typeorm';
 import { Role } from './role.entity';
+import { RoleRequest } from './dto/requests';
 
 @Injectable()
 export class RoleService {
@@ -14,16 +15,23 @@ export class RoleService {
     return this.roleRepository.find();
   }
 
-  findOne(id: number): Promise<Role> {
+  findById(id: number): Promise<Role> {
     return this.roleRepository.findOneOrFail(id);
   }
 
-  create(Role: Role): Promise<InsertResult> {
-    return this.roleRepository.insert(Role);
+  create(data: RoleRequest): Promise<InsertResult> {
+    const role = new Role();
+    role.name = data.name;
+    role.description = data.description;
+
+    return this.roleRepository.insert(role);
   }
 
-  update(id: number, Role: Role): Promise<UpdateResult> {
-    return this.roleRepository.update(id, Role);
+  update(id: number, data: RoleRequest): Promise<UpdateResult> {
+    const role = new Role();
+    role.name = data.name;
+    role.description = data.description;
+    return this.roleRepository.update(id, role);
   }
 
   delete(Role: Role): Promise<Role> {

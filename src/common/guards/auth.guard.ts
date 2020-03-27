@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { TokenService } from '../services/token.service';
 
 @Injectable()
@@ -11,11 +11,19 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const { authorization } = request.headers;
     if (!authorization) {
-      throw new UnauthorizedException("Authorization header is requied");
+      throw new BadRequestException("Authorization header is requied");
     }
 
-    const verifyToken = await this.tokenService.verifyToken(authorization);
-    
-    return !!verifyToken;
+    try {
+      const user = await this.tokenService.verifyToken(authorization);
+      request.user = user;
+
+      return !!user;
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException(error.message);
+      }
+      throw new BadRequestException(error.message);
+    }
   }
 }
